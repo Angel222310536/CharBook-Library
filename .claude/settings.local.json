@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(npx -y impeccable@latest skills install)",
+      "Bash(mkdir -p \"C:\\\\Projects\\\\_downloads\")",
+      "Bash(git clone *)",
+      "Read(//c/Projects/_downloads/anthropic-skills/**)",
+      "Read(//c/Projects/_downloads/anthropic-skills/skills/**)"
+    ]
+  }
+}

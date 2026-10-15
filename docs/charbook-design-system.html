@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CharBook · Tinta Viva — Sistema de Diseño</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:ital,opsz@0,6..72;1,6..72&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper: oklch(0.97 0.012 85);
+  --ink: oklch(0.22 0.03 312);
+  --ink-soft: oklch(0.45 0.03 312);
+  --surface: oklch(0.99 0.008 85);
+  --hairline: oklch(0.22 0.03 312 / 12%);
+  --vermellon: oklch(0.60 0.20 24);
+  --vermellon-wash: oklch(0.60 0.20 24 / 14%);
+  --phosphor: oklch(0.78 0.16 165);
+  --linkblue: oklch(0.55 0.13 250);
+  --shadow: 0 1px 2px oklch(0.22 0.03 312 / 8%), 0 12px 40px oklch(0.22 0.03 312 / 10%);
+  --font-display:"Fraunces",serif;
+  --font-ui:"Hanken Grotesk",system-ui,sans-serif;
+  --font-read:"Newsreader",serif;
+  --font-mono:"Spline Sans Mono",monospace;
+}
+[data-theme="dark"]{
+  --paper: oklch(0.16 0.018 310);
+  --ink: oklch(0.95 0.01 85);
+  --ink-soft: oklch(0.72 0.02 312);
+  --surface: oklch(0.20 0.02 312);
+  --hairline: oklch(0.95 0.01 85 / 14%);
+  --vermellon: oklch(0.66 0.20 24);
+  --vermellon-wash: oklch(0.66 0.20 24 / 20%);
+  --phosphor: oklch(0.86 0.17 165);
+  --shadow: 0 1px 2px oklch(0 0 0 / 30%), 0 20px 60px oklch(0 0 0 / 45%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--font-ui);line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  transition:background .5s ease,color .5s ease;
+  overflow-x:hidden;
+}
+::selection{background:var(--vermellon-wash);color:var(--ink)}
+
+/* layout */
+.wrap{display:grid;grid-template-columns:74px 1fr;max-width:1280px;margin:0 auto;min-height:100vh}
+@media(max-width:760px){.wrap{grid-template-columns:1fr}}
+
+/* SPINE NAV */
+.spine{
+  position:sticky;top:0;height:100vh;border-right:1px solid var(--hairline);
+  display:flex;flex-direction:column;align-items:center;gap:4px;padding:22px 0;
+  background:color-mix(in oklch,var(--paper) 88%,transparent);backdrop-filter:blur(12px);z-index:50;
+}
+.spine .mark{font-family:var(--font-display);font-weight:500;font-size:20px;writing-mode:vertical-rl;
+  transform:rotate(180deg);letter-spacing:1px;margin-bottom:26px;color:var(--vermellon)}
+.spine a{
+  writing-mode:vertical-rl;transform:rotate(180deg);text-decoration:none;color:var(--ink-soft);
+  font-size:12.5px;font-weight:600;letter-spacing:.5px;padding:14px 8px;border-radius:8px;
+  position:relative;transition:.35s cubic-bezier(.2,.8,.2,1);text-transform:uppercase;
+}
+.spine a:hover{color:var(--ink);transform:rotate(180deg) translateX(3px)}
+.spine a.active{color:var(--vermellon);background:var(--vermellon-wash);transform:rotate(180deg) translateX(5px)}
+.spine .toggle{margin-top:auto;cursor:pointer;border:1px solid var(--hairline);background:var(--surface);
+  width:42px;height:42px;border-radius:50%;font-size:17px;color:var(--ink);display:grid;place-items:center;transition:.3s}
+.spine .toggle:hover{border-color:var(--vermellon);transform:rotate(20deg)}
+@media(max-width:760px){
+  .spine{position:fixed;bottom:0;top:auto;flex-direction:row;height:64px;width:100%;
+    border-right:none;border-top:1px solid var(--hairline);padding:0 12px;gap:2px;justify-content:space-around}
+  .spine .mark{display:none}
+  .spine a{writing-mode:horizontal-tb;transform:none;font-size:10px;padding:8px 6px;flex:1;text-align:center}
+  .spine a:hover,.spine a.active{transform:none}
+  .spine .toggle{margin:0;width:36px;height:36px;font-size:14px}
+}
+
+main{padding:0 clamp(20px,5vw,72px) 120px}
+@media(max-width:760px){main{padding-bottom:90px}}
+section{padding:74px 0 30px;border-bottom:1px solid var(--hairline)}
+section:last-child{border-bottom:none}
+.eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--vermellon);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--vermellon)}
+h1{font-family:var(--font-display);font-weight:300;font-size:clamp(38px,7vw,76px);line-height:.98;
+  letter-spacing:-.02em;font-variation-settings:"opsz" 144}
+h2{font-family:var(--font-display);font-weight:400;font-size:clamp(26px,4vw,40px);letter-spacing:-.01em;margin-bottom:8px}
+.lead{font-family:var(--font-read);font-size:clamp(17px,2.2vw,21px);color:var(--ink-soft);max-width:60ch;margin-top:18px;line-height:1.55}
+p.muted{color:var(--ink-soft);max-width:58ch;margin-top:10px}
+
+/* HERO */
+.hero{padding-top:86px}
+.hero .tag{font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);margin-top:30px;
+  display:flex;gap:18px;flex-wrap:wrap}
+.hero .tag span{display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.dot.v{background:var(--vermellon)} .dot.p{background:var(--phosphor);box-shadow:0 0 0 0 var(--phosphor);animation:pulse 2.2s infinite}
+.dot.b{background:var(--linkblue)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in oklch,var(--phosphor) 70%,transparent)}70%{box-shadow:0 0 0 9px transparent}100%{box-shadow:0 0 0 0 transparent}}
+
+/* PALETTE */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:30px}
+.sw{border-radius:14px;border:1px solid var(--hairline);overflow:hidden;background:var(--surface);box-shadow:var(--shadow)}
+.sw .chip{height:78px}
+.sw .meta{padding:11px 13px}
+.sw .name{font-weight:600;font-size:13.5px}
+.sw .val{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-soft);margin-top:3px}
+.voices{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:22px}
+.voice{padding:16px 18px;border-radius:14px;border:1px solid var(--hairline);background:var(--surface)}
+.voice b{font-family:var(--font-display);font-size:18px}
+
+/* TYPE */
+.typerow{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;padding:20px 0;border-bottom:1px dashed var(--hairline)}
+.typerow:last-child{border-bottom:none}
+.typerow .role{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);width:130px;flex-shrink:0;text-transform:uppercase;letter-spacing:1px}
+.s-display{font-family:var(--font-display);font-weight:300;font-size:40px;letter-spacing:-.02em}
+.s-display em{font-style:italic;color:var(--vermellon)}
+.s-ui{font-family:var(--font-ui);font-weight:500;font-size:21px}
+.s-read{font-family:var(--font-read);font-size:20px;line-height:1.5}
+.s-mono{font-family:var(--font-mono);font-size:16px;color:var(--ink-soft)}
+
+/* COMPONENT GRID */
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px;margin-top:32px;align-items:start}
+
+/* LIVING COVER */
+.coverwrap{perspective:1000px;display:flex;justify-content:center;padding:14px 0}
+.cover{
+  width:215px;height:320px;border-radius:6px 12px 12px 6px;position:relative;cursor:pointer;
+  background:linear-gradient(135deg,oklch(0.34 0.09 312),oklch(0.26 0.10 24));
+  box-shadow:var(--shadow);transition:transform .25s cubic-bezier(.2,.8,.2,1);
+  transform-style:preserve-3d;overflow:hidden;
+}
+.cover::before{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;
+  background:linear-gradient(90deg,oklch(0 0 0/35%),transparent);border-radius:6px 0 0 6px}
+.cover .shine{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,oklch(1 0 0/22%) 47%,transparent 60%);
+  transform:translateX(-100%);transition:transform .1s}
+.cover .ct{position:absolute;inset:0;padding:26px 22px;display:flex;flex-direction:column;color:oklch(0.96 0.02 85)}
+.cover .ct .k{font-family:var(--font-mono);font-size:9.5px;letter-spacing:2px;opacity:.7;text-transform:uppercase}
+.cover .ct h3{font-family:var(--font-display);font-weight:400;font-size:29px;line-height:1;margin-top:auto;letter-spacing:-.01em}
+.cover .ct .a{font-family:var(--font-read);font-style:italic;font-size:14px;opacity:.85;margin-top:8px}
+.presence{position:absolute;right:14px;top:14px;display:flex;align-items:center;gap:6px;
+  font-family:var(--font-mono);font-size:10px;color:oklch(0.96 0.02 85)}
+.presence .live{width:8px;height:8px;border-radius:50%;background:var(--phosphor);animation:pulse 2s infinite}
+
+/* MARGINALIA */
+.reader{background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:0;overflow:hidden;box-shadow:var(--shadow)}
+.reader .bar{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--hairline);font-family:var(--font-mono);font-size:11px;color:var(--ink-soft)}
+.reader .body{display:grid;grid-template-columns:1fr 168px}
+@media(max-width:520px){.reader .body{grid-template-columns:1fr}}
+.reader .text{padding:24px 22px;font-family:var(--font-read);font-size:16.5px;line-height:1.72}
+.reader .text .hl{background:var(--vermellon-wash);border-bottom:2px solid var(--vermellon);padding:1px 2px;cursor:pointer;border-radius:2px}
+.margin{border-left:1px solid var(--hairline);padding:18px 14px;background:color-mix(in oklch,var(--vermellon) 4%,transparent)}
+.note{font-size:12px;margin-bottom:16px;position:relative}
+.note .who{display:flex;align-items:center;gap:6px;font-weight:600;margin-bottom:4px}
+.note .who .av{width:18px;height:18px;border-radius:50%;background:var(--vermellon);color:#fff;font-size:9px;display:grid;place-items:center;font-weight:700}
+.note .who .live{width:7px;height:7px;border-radius:50%;background:var(--phosphor);animation:pulse 2s infinite;margin-left:auto}
+.note p{color:var(--ink-soft);font-family:var(--font-read);font-size:12.5px;line-height:1.4}
+
+/* PASSAGE CARD */
+.pcard{border-radius:18px;padding:34px 30px;background:
+   radial-gradient(120% 120% at 0% 0%, color-mix(in oklch,var(--vermellon) 10%,var(--surface)), var(--surface));
+   border:1px solid var(--hairline);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.pcard .quote{font-family:var(--font-display);font-weight:300;font-size:25px;line-height:1.22;letter-spacing:-.01em}
+.pcard .quote::before{content:"“";font-size:52px;color:var(--vermellon);line-height:0;vertical-align:-18px;margin-right:2px}
+.pcard .src{margin-top:20px;font-family:var(--font-read);font-style:italic;color:var(--ink-soft);font-size:14px}
+.pcard .foot{margin-top:22px;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:1px;color:var(--ink-soft);text-transform:uppercase;border-top:1px solid var(--hairline);padding-top:14px}
+.pcard .foot b{color:var(--vermellon)}
+
+/* PULSE */
+.pulse{background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+.pulse .top{display:flex;gap:14px;align-items:center}
+.pulse .mini{width:46px;height:68px;border-radius:3px 6px 6px 3px;background:linear-gradient(135deg,oklch(0.34 0.09 312),oklch(0.26 0.10 24));flex-shrink:0;box-shadow:var(--shadow)}
+.pulse h4{font-family:var(--font-display);font-weight:400;font-size:19px;line-height:1.1}
+.pulse .sub{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-soft);margin-top:4px}
+.bar-track{height:7px;border-radius:99px;background:var(--hairline);margin-top:18px;overflow:hidden}
+.bar-fill{height:100%;width:38%;border-radius:99px;background:linear-gradient(90deg,var(--vermellon),var(--phosphor))}
+.pulse .stats{display:flex;gap:22px;margin-top:16px}
+.pulse .stat b{font-family:var(--font-display);font-size:22px;font-weight:400;display:block}
+.pulse .stat span{font-family:var(--font-mono);font-size:9.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:1px}
+
+/* ROADMAP */
+.road{display:grid;gap:12px;margin-top:30px}
+.phase{display:grid;grid-template-columns:88px 1fr;gap:18px;align-items:start;padding:18px 20px;border:1px solid var(--hairline);border-radius:14px;background:var(--surface);transition:.3s}
+.phase:hover{border-color:var(--vermellon);transform:translateX(4px)}
+.phase .n{font-family:var(--font-display);font-size:30px;font-weight:300;color:var(--vermellon);line-height:1}
+.phase .n small{display:block;font-family:var(--font-mono);font-size:9px;color:var(--ink-soft);letter-spacing:1px;margin-top:3px;text-transform:uppercase}
+.phase h4{font-family:var(--font-display);font-weight:500;font-size:19px;margin-bottom:4px}
+.phase p{font-size:13px;color:var(--ink-soft);max-width:64ch}
+.phase .pill{display:inline-block;font-family:var(--font-mono);font-size:9.5px;border:1px solid var(--hairline);border-radius:99px;padding:2px 8px;margin:6px 5px 0 0;color:var(--ink-soft)}
+
+/* MOBILE FRAME */
+.phone{width:280px;margin:30px auto 0;border-radius:38px;border:9px solid oklch(0.12 0.02 312);background:var(--paper);
+  box-shadow:var(--shadow);overflow:hidden;position:relative}
+.phone .notch{height:26px;background:oklch(0.12 0.02 312);border-radius:0 0 16px 16px;width:120px;margin:0 auto}
+.phone .pscreen{padding:18px 16px 70px}
+.phone .ptab{position:absolute;bottom:0;left:0;right:0;height:58px;background:color-mix(in oklch,var(--paper) 85%,transparent);
+  backdrop-filter:blur(8px);border-top:1px solid var(--hairline);display:flex;justify-content:space-around;align-items:center;
+  font-family:var(--font-mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-soft)}
+.phone .ptab .on{color:var(--vermellon)}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.footer{padding:50px 0 10px;font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);letter-spacing:.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="spine">
+    <div class="mark">CharBook</div>
+    <a href="#hero" class="active">Tinta Viva</a>
+    <a href="#paleta">Paleta</a>
+    <a href="#tipo">Tipografía</a>
+    <a href="#comp">Componentes</a>
+    <a href="#movil">Móvil</a>
+    <a href="#road">Roadmap</a>
+    <div class="toggle" id="tg" title="Cambiar tema">◑</div>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section id="hero" class="hero">
+      <div class="eyebrow">Sistema de diseño · v13→v17</div>
+      <h1>Tinta&nbsp;Viva</h1>
+      <p class="lead">El texto y el papel están vivos y responden a la luz, al tiempo y a la presencia de otros lectores. El "premium" no viene del oro: viene del <em style="font-family:var(--font-read);color:var(--vermellon)">craft</em> editorial.</p>
+      <div class="tag">
+        <span><i class="dot v"></i> Vermellón = personas</span>
+        <span><i class="dot p"></i> Fósforo = tiempo real</span>
+        <span><i class="dot b"></i> Azul = datos</span>
+      </div>
+    </section>
+
+    <!-- PALETA -->
+    <section id="paleta" class="reveal">
+      <div class="eyebrow">01 · Paleta</div>
+      <h2>Papel, tinta y un rojo de corrector</h2>
+      <p class="muted">Nada de navy+dorado genérico. Papel hueso cálido (nunca blanco puro), tinta ciruela profunda (nunca negro puro) y un Vermellón de corrector que ningún competidor posee. Valores en OKLCH, coherentes con tu pipeline actual.</p>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:var(--paper)"></div><div class="meta"><div class="name">Papel</div><div class="val">--paper</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--ink)"></div><div class="meta"><div class="name">Tinta</div><div class="val">--ink · ciruela</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--vermellon)"></div><div class="meta"><div class="name">Vermellón</div><div class="val">marca · marginalia</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--phosphor)"></div><div class="meta"><div class="name">Fósforo</div><div class="val">estados en vivo</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--linkblue)"></div><div class="meta"><div class="name">Azul archivo</div><div class="val">datos · metadata</div></div></div>
+        <div class="sw"><div class="chip" style="background:var(--surface)"></div><div class="meta"><div class="name">Superficie</div><div class="val">tarjetas</div></div></div>
+      </div>
+      <div class="voices">
+        <div class="voice"><b style="color:var(--vermellon)">Vermellón</b><p class="muted" style="font-size:13px;margin-top:6px">Reservado a lo humano dentro del texto: subrayados, notas, marca. Nunca relleno de botones.</p></div>
+        <div class="voice"><b style="color:var(--phosphor)">Fósforo</b><p class="muted" style="font-size:13px;margin-top:6px">Solo tiempo real: Pulse, presencia de lectores, salas activas.</p></div>
+        <div class="voice"><b style="color:var(--linkblue)">Azul archivo</b><p class="muted" style="font-size:13px;margin-top:6px">Frío y secundario: ISBN, enlaces de datos, metadata.</p></div>
+      </div>
+    </section>
+
+    <!-- TIPO -->
+    <section id="tipo" class="reveal">
+      <div class="eyebrow">02 · Tipografía</div>
+      <h2>Cuatro voces tipográficas</h2>
+      <div style="margin-top:22px">
+        <div class="typerow"><span class="role">Display · Fraunces</span><span class="s-display">Crimen y <em>castigo</em></span></div>
+        <div class="typerow"><span class="role">UI · Hanken</span><span class="s-ui">Continuar leyendo · Tu Atelier · Salas</span></div>
+        <div class="typerow"><span class="role">Lectura · Newsreader</span><span class="s-read">Era el mejor de los tiempos, era el peor de los tiempos.</span></div>
+        <div class="typerow"><span class="role">Mono · Spline</span><span class="s-mono">ISBN 978·0·14·044913·6 · 38% · pág 142</span></div>
+      </div>
+    </section>
+
+    <!-- COMPONENTES -->
+    <section id="comp" class="reveal">
+      <div class="eyebrow">03 · Componentes propios</div>
+      <h2>Los que dan identidad</h2>
+      <p class="muted">Mueve el cursor sobre la portada. Pasa el ratón por el texto subrayado. Cada componente existe para diferenciar a CharBook de cualquier lector genérico.</p>
+
+      <div class="grid2">
+        <!-- Living Cover -->
+        <div>
+          <div class="eyebrow" style="margin-top:6px">Living Cover</div>
+          <div class="coverwrap">
+            <div class="cover" id="cover">
+              <div class="shine" id="shine"></div>
+              <div class="presence"><span class="live"></span> 3 leyendo</div>
+              <div class="ct">
+                <div class="k">Fiódor Dostoyevski</div>
+                <h3>Crimen y castigo</h3>
+                <div class="a">Edición CharBook · 1866</div>
+              </div>
+            </div>
+          </div>
+          <p class="muted" style="font-size:12.5px">Parallax 3D, brillo de lomo y punto fósforo cuando hay lectores activos.</p>
+        </div>
+
+        <!-- Pulse -->
+        <div>
+          <div class="eyebrow" style="margin-top:6px">Pulse · estado vivo</div>
+          <div class="pulse">
+            <div class="top">
+              <div class="mini"></div>
+              <div>
+                <h4>Crimen y castigo</h4>
+                <div class="sub">Retomas en el cap. 7 · hace 2 días</div>
+              </div>
+            </div>
+            <div class="bar-track"><div class="bar-fill"></div></div>
+            <div class="stats">
+              <div class="stat"><b>38<small style="font-size:13px">%</small></b><span>Progreso</span></div>
+              <div class="stat"><b>12</b><span>Tu racha</span></div>
+              <div class="stat"><b style="color:var(--phosphor)">3</b><span>En tu círculo</span></div>
+            </div>
+          </div>
+          <p class="muted" style="font-size:12.5px;margin-top:12px">Abrir CharBook = retomar un hilo vivo, no enfrentar un feed vacío.</p>
+        </div>
+      </div>
+
+      <!-- Marginalia reader -->
+      <div style="margin-top:28px">
+        <div class="eyebrow">Margin Layer · la marginalia es el grafo social</div>
+        <div class="reader">
+          <div class="bar"><span class="dot v" style="width:8px;height:8px;border-radius:50%"></span> Lector CharBook · Crimen y castigo · cap. 7</div>
+          <div class="body">
+            <div class="text">
+              Iván se detuvo. <span class="hl" id="hl">La conciencia, cuando despierta, no perdona; persigue al hombre por callejones que él creía olvidados.</span> Siguió andando bajo la lluvia, y cada paso pesaba más que el anterior.
+            </div>
+            <div class="margin">
+              <div class="note">
+                <div class="who"><span class="av">M</span> Marta R. <span class="live"></span></div>
+                <p>Este pasaje lo cambia todo. Volvé acá después del cap. 12.</p>
+              </div>
+              <div class="note">
+                <div class="who"><span class="av" style="background:var(--linkblue)">J</span> Julián</div>
+                <p>El "callejón" es literal y metáfora a la vez. Genial.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="muted" style="font-size:12.5px;margin-top:10px">Lee con los fantasmas de otros lectores: subrayados Vermellón, notas en el margen, presencia en fósforo.</p>
+      </div>
+
+      <!-- Passage card -->
+      <div style="margin-top:28px">
+        <div class="eyebrow">Passage Card · motor viral</div>
+        <div class="grid2">
+          <div class="pcard">
+            <div class="quote">La conciencia, cuando despierta, no perdona; persigue al hombre por callejones que él creía olvidados.</div>
+            <div class="src">— Fiódor Dostoyevski, <em>Crimen y castigo</em></div>
+            <div class="foot"><span>Subrayado por Emiliano</span><span><b>CharBook</b></span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:center">
+            <p class="muted">Dos toques convierten cualquier subrayado en un objeto de diseño exportable a Story, con marca CharBook incrustada. Cada cita compartida es adquisición orgánica.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOVIL -->
+    <section id="movil" class="reveal">
+      <div class="eyebrow">04 · Experiencia móvil</div>
+      <h2>"Tirar del lomo" para retomar</h2>
+      <p class="muted">Móvil-first y de una mano: el gesto estrella es deslizar hacia arriba el lomo central para volver justo donde ibas. Navegación Spine adaptada a barra inferior.</p>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="pscreen">
+          <div class="eyebrow" style="margin-bottom:10px;font-size:9px">Tu Atelier · viernes</div>
+          <div class="coverwrap" style="padding:4px 0">
+            <div class="cover" style="width:150px;height:222px">
+              <div class="presence"><span class="live"></span> 3</div>
+              <div class="ct"><div class="k">Dostoyevski</div><h3 style="font-size:21px">Crimen y castigo</h3><div class="a" style="font-size:11px">38% · cap. 7</div></div>
+            </div>
+          </div>
+          <div class="bar-track" style="margin-top:14px"><div class="bar-fill"></div></div>
+          <p style="font-family:var(--font-display);font-weight:400;font-size:15px;margin-top:16px">El Estante de hoy</p>
+          <p class="muted" style="font-size:11px">Un pasaje, un libro y una sala abierta — cada día.</p>
+        </div>
+        <div class="ptab">
+          <span class="on">Atelier</span><span>Estante</span><span>Leyendo</span><span>Salas</span><span>Buscar</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section id="road" class="reveal">
+      <div class="eyebrow">05 · Roadmap por impacto</div>
+      <h2>De v13 a v17</h2>
+      <div class="road">
+        <div class="phase"><div class="n">13<small>Datos</small></div><div><h4>El Lector Vivo 🩸</h4><p>Sync de progreso · Margin Layer (privado) · Passage Cards · Pulse · Tinta Viva en el lector. Retención + dato propietario.</p><span class="pill">Sync</span><span class="pill">Marginalia</span><span class="pill">Passage Cards</span><span class="pill">Pulse</span></div></div>
+        <div class="phase"><div class="n">14<small>IA</small></div><div><h4>El Bibliotecario + CharBook Plus 🤖</h4><p>Chat spoiler-safe con contexto de progreso (pgvector) · recaps · recs por taste · Reading DNA · suscripción Plus. Diferenciación + MRR.</p><span class="pill">RAG</span><span class="pill">Plus</span><span class="pill">Reading DNA</span></div></div>
+        <div class="phase"><div class="n">15<small>Red</small></div><div><h4>La Comunidad 👥</h4><p>Marginalia social · perfiles Atelier · Antologías colaborativas · Salas de Lectura. Efecto de red + lock-in.</p><span class="pill">Social marginalia</span><span class="pill">Atelier</span><span class="pill">Salas</span></div></div>
+        <div class="phase"><div class="n">16<small>Audio</small></div><div><h4>El Oído 🎧</h4><p>Narración IA (dominio público → audio instantáneo) · read+listen sincronizado · atmósferas premium. Nueva categoría casi gratis.</p><span class="pill">TTS</span><span class="pill">Immersion</span><span class="pill">Atmósferas</span></div></div>
+        <div class="phase"><div class="n">17<small>Oferta</small></div><div><h4>El Atelier del Autor ✍️</h4><p>Author Studio (publicar, vender, payouts) · Ex Libris · temporadas · Wrapped · Constellation. Moat de oferta + viralidad.</p><span class="pill">Author Studio</span><span class="pill">Wrapped</span><span class="pill">Constellation</span></div></div>
+      </div>
+      <div class="footer">CharBook Library · "Tinta Viva" · El lugar donde la lectura deja de ser solitaria sin dejar de ser íntima.</div>
+    </section>
+  </main>
+</div>
+
+<script>
+// theme toggle
+const tg=document.getElementById('tg'),root=document.documentElement;
+tg.onclick=()=>root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+
+// living cover parallax + shine
+const cover=document.getElementById('cover'),shine=document.getElementById('shine');
+if(cover){
+  cover.addEventListener('mousemove',e=>{
+    const r=cover.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-0.5, y=(e.clientY-r.top)/r.height-0.5;
+    cover.style.transform=`rotateY(${x*16}deg) rotateX(${-y*16}deg) translateZ(8px)`;
+    shine.style.transform=`translateX(${x*180}%)`;
+  });
+  cover.addEventListener('mouseleave',()=>{cover.style.transform='';shine.style.transform='translateX(-100%)';});
+}
+
+// scrollspy
+const links=[...document.querySelectorAll('.spine a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+const so=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){
+  links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+en.target.id));}});},{rootMargin:'-45% 0px -50% 0px'});
+secs.forEach(s=>s&&so.observe(s));
+
+// reveal on scroll
+const ro=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');ro.unobserve(en.target);}}),{rootMargin:'-60px'});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+</script>
+</body>
+</html>
